@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" type="text/css" href="/styles.css">
+        <link href='https://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <h1>Studio Movie Night!&nbsp;&nbsp;
+        <a href="#" class="nav active" id="bars">[Bars]</a>&nbsp;&nbsp;
+        <a href="#" class="nav" id="xy">[X / Y]</a>&nbsp;&nbsp;
+        <a href="#" class="nav" id="force">[Force]</a></h1>
+            <form class="pure-form">
+                <div id="x-axis-control">
+                <label>x-axis:</label>
+                    <select id="x-axis">
+                        <option data-x="runtime">Running Time</option>
+                        <option data-x="imdbRating">IMDB Rating</option>
+                        <option data-x="metascore">Meta Score</option>
+                        <option data-x="votes">Studio Votes</option>
+                    </select>
+                </div>
+                <div id="y-axis-control">
+                    <label>y-axis:</label>
+                    <select id="y-axis">
+                        <option data-y="runtime">Running Time</option>
+                        <option data-y="imdbRating" selected="selected">IMDB Rating</option>
+                        <option data-y="metascore">Meta Score</option>
+                        <option data-y="votes">Studio Votes</option>
+                    </select>
+                </div>
+            </form>
+            <div id="vote-filters">
+                <button id="all-movies" class="pure-button pure-button-primary" data-filter="all">All the Movies</button>
+                <button id="with-votes" class="pure-button" data-filter="votes">Movies with Votes</button>
+            </div>
+        </div>
+        <div id="bar-chart">
+        </div>
+        <svg></svg>
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js" charset="utf-8"></script>
+        <script>
+            var d3m = {};
+            d3m.data = {{{data}}};
+        </script>
+        <script src="/vis.js"></script>
+    </body>
+</html>

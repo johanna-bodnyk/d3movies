@@ -1,0 +1,56 @@
+body {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 40px;
+    font-family: 'Monoton', sans-serif;
+    margin: 10px 0;
+}
+
+h1 a {
+    color: #ccc;
+    text-decoration: none;
+}
+
+h1 a.active {
+    color: purple;
+}
+
+#vote-filters, form {
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+#bar-chart {
+    width: 100%;
+}
+
+#bar-chart div {
+    font-size: 12px;
+    text-align: right;
+    padding: 3px;
+    margin: 2px;
+    color: white;
+}
+
+#x-axis-control, #y-axis-control {
+    display: inline-block;
+}
+
+#y-axis-control {
+    margin-left: 10px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+button.pure-button {
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+
+button.pure-button-primary {
+    background-color: purple;
+}
