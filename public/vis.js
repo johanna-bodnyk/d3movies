@@ -136,7 +136,7 @@ $("#vote-filters button").on("click", function(e) {
 
 $("#x-axis").on("change", function(e) {
     xAxis = $(this).find("option:selected").data('x');
-    if (xAxis === "votes") {
+    if (xAxis === "votes" && currentChart === barChart) {
         $("button#all-movies").prop("disabled", true);
         $("button#all-movies").removeClass("pure-button-primary");
         $("button#with-votes").addClass('pure-button-primary');
@@ -145,6 +145,11 @@ $("#x-axis").on("change", function(e) {
     else {
         $("button#all-movies").prop("disabled", false);
     }
+    currentChart();
+});
+
+$("#y-axis").on("change", function(e) {
+    yAxis = $(this).find("option:selected").data('y');
     currentChart();
 });
 
