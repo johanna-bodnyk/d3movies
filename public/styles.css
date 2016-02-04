@@ -32,6 +32,11 @@ h1 a.active {
     padding: 3px;
     margin: 2px;
     color: white;
+    cursor: default;
+}
+
+#bar-chart div:hover {
+    background-color: red;
 }
 
 #x-axis-control, #y-axis-control {
@@ -53,4 +58,34 @@ button.pure-button {
 
 button.pure-button-primary {
     background-color: purple;
+}
+
+#details {
+    display: none;
+    width: 300px;
+    padding: 10px;
+    font-size: 12px;
+    background-color: rgba(30, 30, 30, .8);
+    position: absolute;
+    color: white;
+    border-radius: 5px;
+}
+
+#details img {
+    float: left;
+    width: 100px;
+    margin: 0 10px 5px 0;
+}
+
+#details h2 {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+#details p {
+    margin: 5px 0;
+}
+
+#details p.plot {
+    font-style: italic;
 }

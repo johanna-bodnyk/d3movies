@@ -20,7 +20,21 @@ var unitLabels = {
     votes: "vote(s)"
 };
 
-var xAndY = function() {
+var detailsTemplate = Handlebars.compile('<h2>{{ title }} ({{ year }})</h2><img src="{{ poster }}"><p>{{ genre }} -- Rated {{ rated }}</p><p class="plot">{{ plot }}</p><p>Runtime: {{ runtime }}</p><p>IMDB Rating: {{ imdbRating }}</p><p>Metascore: {{ metascore }}</p><p>Studio Votes: {{ votes }}</p><div style="clear:both"></div>');
+
+var showDetails = function(d, top, left) {
+    var detailDiv = $("#details");
+    detailDiv.html(detailsTemplate(d));
+    detailDiv.css("top", top);
+    detailDiv.css("left", left);
+    detailDiv.show();    
+}
+
+var hideDetails = function() {
+    $("#details").hide();
+}
+
+var scatterPlot = function() {
 
     data = _.filter(data, function(item) {
         return item[xAxis] != "N/A" && item[yAxis] != "N/A"; // check for numbers instead
@@ -57,9 +71,15 @@ var xAndY = function() {
     dots
         .attr("cx", function(d) { return x(d[xAxis]) + "%"; })
         .attr("cy", function(d) { return y(d[yAxis]); })
-        .attr("r", 5);
-        // TODO: Add colors
-
+        .attr("r", function(d) {return (d.votes + 2) * 1.5})
+        .on("mouseover", function(d) {
+            this.style.fill = "purple";
+            showDetails(d, d3.event.pageY, d3.event.pageX);
+        })
+        .on("mouseout", function(d) {
+            this.style.fill = "black";
+            hideDetails();
+        });
 }
 
 var barChart = function() {
@@ -98,8 +118,20 @@ var barChart = function() {
             return d3.hsl(h, .75, .5).toString();
         })
         .text(function(d) { return d.title + " (" + d[xAxis] + " " + unitLabels[xAxis] + ")"; })
-        .style("width", function(d) { return x(d[xAxis]) + "%"; });
-}    
+        .style("width", function(d) { return x(d[xAxis]) + "%"; })
+        .on("mouseover", function(d) {
+            var h = c(d[xAxis]);
+            var newColor = d3.hsl(h, .75, .75).toString();
+            $(this).css("background-color", newColor);
+            showDetails(d, d3.event.pageY, d3.event.pageX);
+        })
+        .on("mouseout", function(d) {
+            var h = c(d[xAxis]);
+            var newColor = d3.hsl(h, .75, .5).toString();
+            $(this).css("background-color", newColor);
+            hideDetails();
+        });
+}
 
 // Controls
 $("a.nav").on("click", function(e) {
@@ -114,7 +146,7 @@ $("a.nav").on("click", function(e) {
             currentChart = barChart;
             break;
         case "xy":
-            currentChart = xAndY;
+            currentChart = scatterPlot;
             break;
         case "force":
             break;
@@ -154,5 +186,6 @@ $("#y-axis").on("change", function(e) {
 });
 
 // Show default chart
+hideDetails();
 currentChart = barChart;
 currentChart();

@@ -37,12 +37,14 @@
                 <button id="with-votes" class="pure-button" data-filter="votes">Movies with Votes</button>
             </div>
         </div>
+        <div id="details"></div>
         <div id="bar-chart">
         </div>
         <svg></svg>
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js" charset="utf-8"></script>
+        <script src="/handlebars-1.0.rc.1.min.js"></script>
         <script>
             var d3m = {};
             d3m.data = {{{data}}};
