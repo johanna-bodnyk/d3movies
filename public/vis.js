@@ -8,8 +8,8 @@ var moviesWithVotes = _.filter(movies, function(movie) {
 });
 
 // Defaults
-var xAxis = "runtime";
-var yAxis = "imdbRating";
+var xData = "runtime";
+var yData = "imdbRating";
 var data = movies;
 var currentChart;
 
@@ -20,32 +20,47 @@ var unitLabels = {
     votes: "vote(s)"
 };
 
-var xAndY = function() {
+var scatterPlot = function() {
+    var margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
     data = _.filter(data, function(item) {
-        return item[xAxis] != "N/A" && item[yAxis] != "N/A"; // check for numbers instead
+        return item[xData] != "N/A" && item[yData] != "N/A"; // check for numbers instead
     });
 
-    var xDomain = _.pluck(data, xAxis);
+    var xDomain = _.pluck(data, xData);
     var x = d3.scale.linear()
         .domain([d3.min(xDomain), d3.max(xDomain)])
-        .range([1, 101]);
+        .range([0, width]);
 
-    var yDomain = _.pluck(data, yAxis);
+    var yDomain = _.pluck(data, yData);
     var y = d3.scale.linear()
         .domain([d3.min(yDomain), d3.max(yDomain)])
-        .range([605, 5]);
+        .range([height, 0]);
 
     // Hide the bar chart, show the y-axis control
     d3.select("#y-axis-control").style("display", "inline");
     d3.select("#bar-chart").style("display", "none");
 
     var svg = d3.select("svg")
-        .style("display", "block")
-        .style("height", "600px") // Use window height minus nav instead
-        .style("width", "100%")
-        .style("border-left", "1px solid black")
-        .style("border-bottom", "1px solid black");
+        .style("display", "inline-block")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(10);
+    var yAxis = d3.svg.axis().scale(y).orient("left").ticks(10);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
     var dots = svg.selectAll("circle")
                 .data(data, function(d) { return d.title; });
@@ -55,22 +70,20 @@ var xAndY = function() {
     dots.enter().append("circle");
 
     dots
-        .attr("cx", function(d) { return x(d[xAxis]) + "%"; })
-        .attr("cy", function(d) { return y(d[yAxis]); })
+        .attr("cx", function(d) { return x(d[xData]); })
+        .attr("cy", function(d) { return y(d[yData]); })
         .attr("r", 5);
-        // TODO: Add colors
-
 }
 
 var barChart = function() {
     data = _.filter(data, function(item) {
-        return item[xAxis] != "N/A"; // check for a number instead
+        return item[xData] != "N/A"; // check for a number instead
     }); 
     data = _.sortBy(data, function(item) {
-        return item[xAxis];
+        return item[xData];
     });
 
-    var domain = _.pluck(data, xAxis);
+    var domain = _.pluck(data, xData);
     var x = d3.scale.linear()
         .domain([0, d3.max(domain)])
         .range([0, 100]);
@@ -94,11 +107,11 @@ var barChart = function() {
     bars
         .order()
         .style("background-color", function(d) { 
-            var h = c(d[xAxis]);
+            var h = c(d[xData]);
             return d3.hsl(h, .75, .5).toString();
         })
-        .text(function(d) { return d.title + " (" + d[xAxis] + " " + unitLabels[xAxis] + ")"; })
-        .style("width", function(d) { return x(d[xAxis]) + "%"; });
+        .text(function(d) { return d.title + " (" + d[xData] + " " + unitLabels[xData] + ")"; })
+        .style("width", function(d) { return x(d[xData]) + "%"; });
 }    
 
 // Controls
@@ -114,7 +127,7 @@ $("a.nav").on("click", function(e) {
             currentChart = barChart;
             break;
         case "xy":
-            currentChart = xAndY;
+            currentChart = scatterPlot;
             break;
         case "force":
             break;
@@ -135,8 +148,8 @@ $("#vote-filters button").on("click", function(e) {
 });
 
 $("#x-axis").on("change", function(e) {
-    xAxis = $(this).find("option:selected").data('x');
-    if (xAxis === "votes" && currentChart === barChart) {
+    xData = $(this).find("option:selected").data('x');
+    if (xData === "votes" && currentChart === barChart) {
         $("button#all-movies").prop("disabled", true);
         $("button#all-movies").removeClass("pure-button-primary");
         $("button#with-votes").addClass('pure-button-primary');
@@ -149,7 +162,7 @@ $("#x-axis").on("change", function(e) {
 });
 
 $("#y-axis").on("change", function(e) {
-    yAxis = $(this).find("option:selected").data('y');
+    yData = $(this).find("option:selected").data('y');
     currentChart();
 });
 
