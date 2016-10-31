@@ -1,5 +1,5 @@
 # Studio Movie Night + D3
-Visualizing what we want to watch
+Visualizing what we want to watch.
 
 ## To Do
 * Labels for the scatter plot
